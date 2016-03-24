@@ -1,11 +1,15 @@
+FORK
+==============================
+This is a fork of the excellent authorizesauce repo to allow more flexibility with local settings
+
 Seeking New Project Maintainer
 ==============================
 
-I no longer use Authorize.net for payment processing, no longer use 
+I no longer use Authorize.net for payment processing, no longer use
 authorizesauce, and do not have the time to properly maintain this project.
 If anyone is willing to step up and take over, I would happily hand over the
-reins to someone better suited than me. Please find my email at 
-https://github.com/jeffschenck and reach out if you're interested. 
+reins to someone better suited than me. Please find my email at
+https://github.com/jeffschenck and reach out if you're interested.
 
 Thanks to everyone who's contributed and helped out with the project!
 
