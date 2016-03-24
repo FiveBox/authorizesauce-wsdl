@@ -11,9 +11,14 @@ from authorize.data import Address, CreditCard
 from authorize.apis.transaction import parse_response
 from authorize.exceptions import AuthorizeConnectionError, \
     AuthorizeError, AuthorizeResponseError, AuthorizeInvalidError
+from authorize.conf import settings
 
 PROD_URL = 'https://api.authorize.net/soap/v1/Service.asmx?WSDL'
-TEST_URL = 'https://apitest.authorize.net/soap/v1/Service.asmx?WSDL'
+if settings.TEST_URL:
+    TEST_URL = settings.AUTHORIZE_TEST_URL
+else:
+    TEST_URL = 'https://apitest.authorize.net/soap/v1/Service.asmx?WSDL'
+
 
 class CustomerAPI(object):
     def __init__(self, login_id, transaction_key, debug=True, test=False):
