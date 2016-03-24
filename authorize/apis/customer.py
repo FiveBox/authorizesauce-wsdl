@@ -14,7 +14,7 @@ from authorize.exceptions import AuthorizeConnectionError, \
 from authorize.conf import settings
 
 PROD_URL = 'https://api.authorize.net/soap/v1/Service.asmx?WSDL'
-if settings.TEST_URL:
+if settings.AUTHORIZE_TEST_URL:
     TEST_URL = settings.AUTHORIZE_TEST_URL
 else:
     TEST_URL = 'https://apitest.authorize.net/soap/v1/Service.asmx?WSDL'
