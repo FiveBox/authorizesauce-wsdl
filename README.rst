@@ -1,6 +1,7 @@
 FORK
 ==============================
 This is a fork of the excellent authorizesauce repo to allow more flexibility with local settings
+specifically using Django settings
 
 Seeking New Project Maintainer
 ==============================
