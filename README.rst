@@ -3,11 +3,13 @@ FORK
 This is a fork of the excellent authorizesauce repo to allow more flexibility with local settings
 specifically using Django settings
 
-##Usage
+Usage
+------------------------------
 
-In the settings.py file for the django app using this library, add the following settings parameter
+In the settings.py file for the django app using this library, add the following settings parameter to
+use your own version of Authorize.net's WSDL data
 
-`AUTHORIZE_TEST_URL = 'https://thedesignnetwork.com/wsdl/dev/'`
+`AUTHORIZE_TEST_URL = '<hosted url>'`
 
 Seeking New Project Maintainer
 ==============================
