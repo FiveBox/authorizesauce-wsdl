@@ -113,20 +113,24 @@ class TransactionAPI(object):
                 del params[key]
         return params
 
-    def auth(self, amount, credit_card, address=None, email=None):
+    def auth(self, amount, credit_card, address=None, email=None, invoice_num=''):
         amount = Decimal(str(amount)).quantize(Decimal('0.01'))
         params = self.base_params.copy()
         params = self._add_params(params, credit_card, address, email)
         params['x_type'] = 'AUTH_ONLY'
         params['x_amount'] = str(amount)
+        if invoice_num:
+            params['x_invoice_num'] = u'%s' % invoice_num
         return self._make_call(params)
 
-    def capture(self, amount, credit_card, address=None, email=None):
+    def capture(self, amount, credit_card, address=None, email=None, invoice_num=''):
         amount = Decimal(str(amount)).quantize(Decimal('0.01'))
         params = self.base_params.copy()
         params = self._add_params(params, credit_card, address, email)
         params['x_type'] = 'AUTH_CAPTURE'
         params['x_amount'] = str(amount)
+        if invoice_num:
+            params['x_invoice_num'] = u'%s' % invoice_num
         return self._make_call(params)
 
     def settle(self, transaction_id, amount=None):
