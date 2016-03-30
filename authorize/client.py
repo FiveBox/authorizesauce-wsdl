@@ -311,7 +311,7 @@ class AuthorizeSavedCard(object):
         transaction.full_response = response
         return transaction
 
-    def capture(self, amount,  cvv=None):
+    def capture(self, amount,  cvv=None, invoice_num=''):
         """
         Capture a transaction immediately on this card for the specified
         amount. Returns an
@@ -319,7 +319,7 @@ class AuthorizeSavedCard(object):
         instance representing the transaction.
         """
         response = self._client._customer.capture(
-            self._profile_id, self._payment_id, amount, cvv)
+            self._profile_id, self._payment_id, amount, cvv, invoice_num=invoice_num)
         transaction = self._client.transaction(response['transaction_id'])
         transaction.full_response = response
         return transaction
