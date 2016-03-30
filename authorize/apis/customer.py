@@ -236,7 +236,10 @@ class CustomerAPI(object):
             transaction, self.transaction_options)
         return parse_response(response.directResponse)
 
-    def capture(self, profile_id, payment_id, amount, cvv=None):
+    def _capture(self, profile_id, payment_id, amount, cvv=None):
+        """
+        Original capture
+        """
         if cvv is not None:
             try:
                 int(cvv)
@@ -250,6 +253,35 @@ class CustomerAPI(object):
         capture.customerPaymentProfileId = payment_id
         capture.cardCode = cvv
         transaction.profileTransAuthCapture = capture
+        response = self._make_call('CreateCustomerProfileTransaction',
+            transaction, self.transaction_options)
+        return parse_response(response.directResponse)
+        
+    def capture(self, profile_id, payment_id, amount, cvv=None, invoice_num=''):
+        """
+        Capture with invoice number
+        """
+        if cvv is not None:
+            try:
+                int(cvv)
+            except ValueError:
+                raise AuthorizeInvalidError("CVV Must be a number.")
+        transaction = self.client.factory.create('ProfileTransactionType')
+        capture = self.client.factory.create('ProfileTransAuthCaptureType')
+        
+        if invoice_num:
+            order = self.client.factory.create('OrderType')
+            order.invoiceNumber = u'%s' % invoice_num.strip()
+        else:
+            order = None
+        amount = Decimal(str(amount)).quantize(Decimal('0.01'))
+        capture.amount = str(amount)
+        capture.customerProfileId = profile_id
+        capture.customerPaymentProfileId = payment_id
+        capture.cardCode = cvv
+        transaction.profileTransAuthCapture = capture
+        if order:
+            transaction.order = order
         response = self._make_call('CreateCustomerProfileTransaction',
             transaction, self.transaction_options)
         return parse_response(response.directResponse)
