@@ -270,8 +270,8 @@ class CustomerAPI(object):
         capture = self.client.factory.create('ProfileTransAuthCaptureType')
         
         if invoice_num:
-            order = self.client.factory.create('OrderType')
-            order.invoiceNumber = u'%s' % invoice_num.strip()
+            order = self.client.factory.create('OrderExType')
+            order.invoiceNumber = str(invoice_num).strip()
         else:
             order = None
         amount = Decimal(str(amount)).quantize(Decimal('0.01'))
@@ -279,9 +279,9 @@ class CustomerAPI(object):
         capture.customerProfileId = profile_id
         capture.customerPaymentProfileId = payment_id
         capture.cardCode = cvv
-        transaction.profileTransAuthCapture = capture
         if order:
-            transaction.order = order
+            capture.order = order
+        transaction.profileTransAuthCapture = capture
         response = self._make_call('CreateCustomerProfileTransaction',
             transaction, self.transaction_options)
         return parse_response(response.directResponse)
