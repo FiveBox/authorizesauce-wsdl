@@ -55,10 +55,12 @@ class CustomerAPI(object):
         if response.resultCode != 'Ok':
             error = response.messages[0][0]
             e = AuthorizeResponseError('%s: %s' % (error.code, error.text))
+            e.code = error.code
             e.full_response = {
                 'response_code': error.code,
                 'response_text': error.text,
             }
+            e.original_response = response
             raise e
         return response
 
@@ -130,8 +132,17 @@ class CustomerAPI(object):
         # If a profile id is provided, create saved payment on that profile
         # Otherwise, return an object for a later call to create_saved_profile
         if profile_id:
-            response = self._make_call('CreateCustomerPaymentProfile',
-                profile_id, payment_profile, 'none')
+            try:
+                response = self._make_call('CreateCustomerPaymentProfile',
+                    profile_id, payment_profile, 'none')
+            except AuthorizeResponseError as e:
+                if (e.code == 'E00039'):
+                    # "E00039: A duplicate customer payment profile already exists."
+                    # The payment profile already exists, but instead of simply returning
+                    # the existing ID, authorize throws an error with the existing ID.
+                    return e.original_response.customerPaymentProfileId
+                else:
+                    raise e
             return response.customerPaymentProfileId
         else:
             return payment_profile
